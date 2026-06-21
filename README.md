@@ -16,22 +16,30 @@ State a goal in plain language; an agent inspects the model, changes parameters,
 
 ## Quick start
 
-**Windows + [Claude Code](https://www.anthropic.com/claude-code) — one command.** Sets up a Python 3.11 venv, installs the pinned deps, and registers the MCP server with Claude Code:
+**Windows + [Claude Code](https://www.anthropic.com/claude-code).** Clone the repo, then one command sets up a Python 3.11 venv, installs the pinned deps, and registers the MCP server with Claude Code:
 
 ```powershell
+git clone https://github.com/Zhonghao1995/Agentic-MIKE-Plus.git
+cd Agentic-MIKE-Plus
 powershell -ExecutionPolicy Bypass -File scripts\install.ps1
 ```
 
-By hand (or for another MCP client):
+Prefer to do it by hand?
 
 ```powershell
+git clone https://github.com/Zhonghao1995/Agentic-MIKE-Plus.git
+cd Agentic-MIKE-Plus
 py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.lock
 .\.venv\Scripts\python.exe -m pip install -e .
-claude mcp add mike-plus -- "<repo>\.venv\Scripts\python.exe" -m mikeplus_mcp.server   # Claude Code
 ```
 
-Needs **Python 3.11 (x64)**; *run/edit* also needs a licensed **MIKE+ 2026**. For other MCP clients, copy `config/mcp.sample.json` and fix the paths. Versions are pinned in [`requirements.lock`](requirements.lock).
+Then register the server with your MCP client — the one-command installer already does this for Claude Code:
+
+- **Claude Code:** `claude mcp add mike-plus -- "$PWD\.venv\Scripts\python.exe" -m mikeplus_mcp.server`
+- **Other clients:** copy `config/mcp.sample.json` and fix the paths.
+
+Needs **Python 3.11 (x64)**; *run/edit* also needs a licensed **MIKE+ 2026**. Versions are pinned in [`requirements.lock`](requirements.lock).
 
 ## Why it matters
 
