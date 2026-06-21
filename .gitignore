@@ -1,0 +1,7 @@
+.venv/
+_scratch/
+runs/
+__pycache__/
+*.pyc
+*.egg-info/
+config/mcp.local.json
