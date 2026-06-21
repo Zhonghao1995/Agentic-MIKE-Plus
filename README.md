@@ -16,25 +16,48 @@
 
 ## Install: just tell your agent
 
-It is the AI era — you don't wire this up by hand. Paste this to your AI coding agent (Claude Code, Codex, …):
+It is the AI era — you don't wire this up by hand. Paste the block below to your AI coding agent (Claude Code, Codex, Hermes, OpenClaw) and it will install and register itself:
 
 ```text
-Set up Agentic MIKE+ for me — an MCP server + skills that drive MIKE+ headless.
+Set up "Agentic MIKE+" for me — an MCP server + skills that let you drive MIKE+ (urban
+drainage) headless: inspect, edit, run, read, and plot models from plain language.
+Go step by step, check as you go, and stop and ask me if a prerequisite is missing.
 
-1. Clone https://github.com/Zhonghao1995/Agentic-MIKE-Plus and read its README.
-2. Make a Python 3.11 (x64) venv in the repo and install it:
-   pip install -r requirements.lock   then   pip install -e .
-3. Register the MCP server with me (Claude Code):
-   claude mcp add mike-plus -- "<repo>/.venv/Scripts/python.exe" -m mikeplus_mcp.server
-4. Copy the skills/mike-* folders into ~/.claude/skills/ so you know how to drive the tools.
-5. Run scripts/smoke_test.py to confirm the 10 tools load.
-6. Tell me what's available and which tools need a MIKE+ license
-   (running or editing a model does; reading results and plotting do not).
+1. Clone it and read it first:
+     git clone https://github.com/Zhonghao1995/Agentic-MIKE-Plus
+   Read README.md, pyproject.toml and requirements.lock so you know the requirements
+   and the pinned versions before installing anything.
+
+2. Check prerequisites (report what you find; do not assume):
+   - Python 3.11, 64-bit — mikeplus supports only 3.9-3.11 x64, NOT 3.12+. Find a 3.11
+     x64 interpreter (e.g. `py -3.11`); if there is none, tell me and stop.
+   - Windows. Running or editing a model also needs a licensed MIKE+ 2026 install;
+     reading results and plotting need no license.
+
+3. Install in the repo with that 3.11 x64 interpreter:
+     py -3.11 -m venv .venv
+     .venv\Scripts\python.exe -m pip install -r requirements.lock
+     .venv\Scripts\python.exe -m pip install -e .
+
+4. Register the MCP server, using the ABSOLUTE venv python path:
+   - Claude Code:  claude mcp add mike-plus -- "<abs-repo>\.venv\Scripts\python.exe" -m mikeplus_mcp.server
+   - Codex / Hermes / OpenClaw: copy config/mcp.sample.json and fix the paths.
+
+5. Install the skills so you know how to drive the tools: copy every folder under
+   skills/ (mike-model, mike-params, mike-runner, mike-results, mike-plot) into my
+   skills directory (Claude Code: ~/.claude/skills/).
+
+6. Verify, then report back:
+     .venv\Scripts\python.exe scripts\locate_mike.py    (toolchain + versions)
+     .venv\Scripts\python.exe scripts\smoke_test.py     (should discover all 10 tools)
+   Then tell me the available tools, which ones need a MIKE+ license (run/edit do;
+   read/plot do not), and an example prompt for each skill.
+
+Windows shortcut: after cloning, `powershell -ExecutionPolicy Bypass -File scripts\install.ps1`
+runs the venv install, Claude Code registration, and smoke test (steps 3, 4, 6).
 ```
 
-On Windows the agent can do steps 2–5 in one shot: after cloning, `powershell -ExecutionPolicy Bypass -File scripts\install.ps1`.
-
-Needs **Python 3.11 (x64)**; *run/edit* also needs a licensed **MIKE+ 2026**. Exact versions are pinned in [`requirements.lock`](requirements.lock); other MCP clients can use `config/mcp.sample.json`.
+Needs **Python 3.11 (x64)**; *run/edit* also needs a licensed **MIKE+ 2026**. Versions are pinned in [`requirements.lock`](requirements.lock).
 
 ## Why it matters
 
