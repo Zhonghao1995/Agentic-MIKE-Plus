@@ -31,8 +31,6 @@ Install "Agentic MIKE+" for me — an MCP server + skills to drive MIKE+ headles
    (Codex / Hermes / OpenClaw: copy config/mcp.sample.json)
 4. Copy skills/* into ~/.claude/skills/, then run scripts/smoke_test.py (should find 10 tools).
 5. Tell me the tools and which need a MIKE+ license (run/edit do; read/plot don't).
-
-Windows one-shot for steps 2-4: powershell -ExecutionPolicy Bypass -File scripts\install.ps1
 ```
 
 Needs **Python 3.11 (x64)**; *run/edit* also needs a licensed **MIKE+ 2026**. Versions pinned in [`requirements.lock`](requirements.lock).
