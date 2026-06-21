@@ -1,7 +1,7 @@
 # Agentic MIKE+
 
 **A headless, natural-language-driven, automated modelling workflow for MIKE+.**
-State a goal in plain language; an agent inspects the model, changes parameters, runs simulations, reads results, and plots — end to end, without ever opening the MIKE+ GUI.
+**Skills + an MCP server** for [Claude Code](https://www.anthropic.com/claude-code), Codex, Hermes, or OpenClaw: describe a goal in plain language and the agent inspects, edits, runs, reads, and plots a MIKE+ model — automated modelling and analysis, end to end, without ever opening the GUI.
 
 <p>
   <a href="https://github.com/Zhonghao1995/Agentic-MIKE-Plus/actions/workflows/ci.yml"><img src="https://github.com/Zhonghao1995/Agentic-MIKE-Plus/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
@@ -40,7 +40,7 @@ Needs **Python 3.11 (x64)**; *run/edit* also needs a licensed **MIKE+ 2026**. Ex
 
 - **Natural-language-driven.** Describe the task in plain words; the agent plans and runs it — no scripting, no GUI clicking. (A sub-agent did this autonomously.)
 - **Fully headless.** Runs with no GUI — on a workstation, a server, in CI, or under an agent. Built for batch and scenario automation.
-- **MCP-native and portable.** One server speaks the Model Context Protocol; connect Claude Desktop or Codex with a single config line, and install with pip.
+- **MCP-native and portable.** One server speaks the Model Context Protocol; works with **Claude Code, Codex, Hermes, or OpenClaw** via a single config line, and installs with pip.
 - **Low barrier to share.** Reading results and plotting need no MIKE+ license — only running or editing does. Teammates analyse model output with nothing but `pip install`.
 - **Reproducible.** Deterministic tools, structured-JSON output, a pinned lockfile, verified on a real model — not a chat-to-model black box.
 - **Engine-agnostic and extensible.** Results use a common schema (ready to sit beside SWMM and LSTM); add a tool or skill by dropping in a file.
