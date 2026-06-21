@@ -14,32 +14,27 @@ State a goal in plain language; an agent inspects the model, changes parameters,
 
 > Experimental / pre-release. One MCP server + skills wrapping DHI's Python stack (`mikeplus` / `mikeio` / `mikeio1d`). Verified end to end on the MIKE+ 2026 `Sirius_RTC` example. Sibling of [agentic-swmm-workflow](https://github.com/Zhonghao1995/agentic-swmm-workflow).
 
-## Quick start
+## Install: just tell your agent
 
-**Windows + [Claude Code](https://www.anthropic.com/claude-code).** Clone the repo, then one command sets up a Python 3.11 venv, installs the pinned deps, and registers the MCP server with Claude Code:
+It is the AI era — you don't wire this up by hand. Paste this to your AI coding agent (Claude Code, Codex, …):
 
-```powershell
-git clone https://github.com/Zhonghao1995/Agentic-MIKE-Plus.git
-cd Agentic-MIKE-Plus
-powershell -ExecutionPolicy Bypass -File scripts\install.ps1
+```text
+Set up Agentic MIKE+ for me — an MCP server + skills that drive MIKE+ headless.
+
+1. Clone https://github.com/Zhonghao1995/Agentic-MIKE-Plus and read its README.
+2. Make a Python 3.11 (x64) venv in the repo and install it:
+   pip install -r requirements.lock   then   pip install -e .
+3. Register the MCP server with me (Claude Code):
+   claude mcp add mike-plus -- "<repo>/.venv/Scripts/python.exe" -m mikeplus_mcp.server
+4. Copy the skills/mike-* folders into ~/.claude/skills/ so you know how to drive the tools.
+5. Run scripts/smoke_test.py to confirm the 10 tools load.
+6. Tell me what's available and which tools need a MIKE+ license
+   (running or editing a model does; reading results and plotting do not).
 ```
 
-Prefer to do it by hand?
+On Windows the agent can do steps 2–5 in one shot: after cloning, `powershell -ExecutionPolicy Bypass -File scripts\install.ps1`.
 
-```powershell
-git clone https://github.com/Zhonghao1995/Agentic-MIKE-Plus.git
-cd Agentic-MIKE-Plus
-py -3.11 -m venv .venv
-.\.venv\Scripts\python.exe -m pip install -r requirements.lock
-.\.venv\Scripts\python.exe -m pip install -e .
-```
-
-Then register the server with your MCP client — the one-command installer already does this for Claude Code:
-
-- **Claude Code:** `claude mcp add mike-plus -- "$PWD\.venv\Scripts\python.exe" -m mikeplus_mcp.server`
-- **Other clients:** copy `config/mcp.sample.json` and fix the paths.
-
-Needs **Python 3.11 (x64)**; *run/edit* also needs a licensed **MIKE+ 2026**. Versions are pinned in [`requirements.lock`](requirements.lock).
+Needs **Python 3.11 (x64)**; *run/edit* also needs a licensed **MIKE+ 2026**. Exact versions are pinned in [`requirements.lock`](requirements.lock); other MCP clients can use `config/mcp.sample.json`.
 
 ## Why it matters
 
