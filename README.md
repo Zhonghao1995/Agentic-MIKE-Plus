@@ -47,7 +47,7 @@ Needs **Python 3.11 (x64)**. Two install profiles:
 - **Fully headless.** Runs with no GUI — on a workstation, a server, in CI, or under an agent. Built for batch and scenario automation.
 - **MCP-native and portable.** One server speaks the Model Context Protocol; works with **Claude Code, Codex, Hermes, or OpenClaw** via a single config line, and installs with pip.
 - **Low barrier to share.** Reading results and plotting need no MIKE+ license — only running or editing does. Teammates analyse model output with nothing but `pip install`.
-- **Reproducible.** Deterministic tools, structured-JSON output, a pinned lockfile, verified on a real model — not a chat-to-model black box.
+- **Reproducible & tested.** Deterministic tools, structured-JSON output, a pinned lockfile, and a license-free unit-test suite in CI — verified on a real model, not a chat-to-model black box.
 - **Engine-agnostic and extensible.** Results use a common schema (ready to sit beside SWMM and LSTM); add a tool or skill by dropping in a file.
 
 <p align="center">
@@ -72,7 +72,7 @@ agent  ->  reads skills/*.md  ->  calls MCP tools  ->  workers (mikeplus / mikei
 |---|---|---|
 | `mike_model_info` | model overview: simulations, scenarios, element counts | yes |
 | `mike_get_values` / `mike_set_values` | read / change parameters (e.g. pipe diameter) | yes |
-| `mike_run` | run a simulation headless, return `.res1d` | yes |
+| `mike_run` | run a simulation headless, return `.res1d` + a parsed QA status (completed / errors / warnings) | yes |
 | `mike_results_list` / `summary` / `read` | list contents / peaks / one time series | no |
 | `mike_plot_rain_flow` / `timeseries` / `network` | stacked hydrograph / series / network map | no |
 
@@ -88,6 +88,18 @@ Five skills (`mike-model`, `mike-params`, `mike-runner`, `mike-results`, `mike-p
 </p>
 
 Full evidence — commands, outputs, and the honest license boundary — is in **[docs/verification.md](docs/verification.md)**.
+
+## Development
+
+The engine-agnostic core is covered by a **license-free** test suite (no MIKE+ / `mikeplus` needed) that also runs in CI:
+
+```bash
+pip install -e .            # read/plot core (add ".[run]" for run/edit)
+pip install pytest
+pytest                      # ~0.5 s, no license required
+```
+
+The tests pin the result schema, the res1d column matcher, the engine-log QA parser, and tool discovery, so a change can't silently break them. Add a tool or skill by dropping a file under `mikeplus_mcp/tools/` or `skills/` (auto-discovered) — and ship a test with it.
 
 ## License
 
