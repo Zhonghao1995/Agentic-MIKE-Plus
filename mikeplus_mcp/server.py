@@ -21,6 +21,17 @@ _TOOLS = {t.name: t for t in discover_tools()}
 server = Server("mike-plus")
 
 
+def _safe_invoke(tool, arguments: dict | None) -> dict:
+    """Run a tool handler, coercing any failure to the same {ok:false} shape the
+    handlers already use for logic errors. Without this, infrastructure failures
+    (worker timeout / no result / missing worker) would surface as a protocol-level
+    exception, so the agent would see two different failure shapes."""
+    try:
+        return tool.handler(arguments or {})
+    except Exception as exc:
+        return {"ok": False, "error": f"{type(exc).__name__}: {exc}"}
+
+
 @server.list_tools()
 async def _list_tools() -> list[types.Tool]:
     return [
@@ -35,7 +46,7 @@ async def _call_tool(name: str, arguments: dict | None) -> list[types.TextConten
     if tool is None:
         raise ValueError(f"Unknown tool: {name}")
     # handlers spawn a subprocess (blocking) — run off the event loop
-    result = await asyncio.to_thread(tool.handler, arguments or {})
+    result = await asyncio.to_thread(_safe_invoke, tool, arguments)
     text = json.dumps(result, ensure_ascii=False, default=str, indent=2)
     return [types.TextContent(type="text", text=text)]
 
