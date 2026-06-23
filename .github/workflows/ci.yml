@@ -26,3 +26,8 @@ jobs:
 
       - name: Smoke test (license-free tool discovery)
         run: python scripts/smoke_test.py
+
+      - name: Unit tests (license-free)
+        run: |
+          pip install pytest
+          pytest
