@@ -12,7 +12,7 @@ def main() -> None:
     out = payload["__out"]
     try:
         import mikeio1d
-        from mikeplus_mcp.contracts import plot_style
+        from mikeplus_mcp.contracts import plot_style, schema
         from mikeplus_mcp.contracts.units import unit_for
 
         action = payload.get("action", "rain_flow")
@@ -40,10 +40,7 @@ def main() -> None:
             df = res.read()
 
             def series_for(quantity, element):
-                base = f"{quantity}:{element}"
-                # exact (node) OR 'base:' prefix (reach w/ chainage) — keeps node 'X'
-                # distinct from reach 'X.2'
-                cols = [c for c in df.columns if str(c) == base or str(c).startswith(base + ":")]
+                cols = schema.match_columns(df.columns, quantity, element)
                 if not cols:
                     raise ValueError(f"no series for {quantity}:{element}")
                 return df[cols[0]], str(cols[0])

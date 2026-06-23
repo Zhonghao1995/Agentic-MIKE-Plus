@@ -74,17 +74,22 @@ def main() -> None:
             quantity = payload["quantity"]
             element = payload["element"]
             df = res.read()
-            base = f"{quantity}:{element}"
-            # exact (node, no chainage) OR 'base:' prefix (reach w/ chainage); avoids
-            # matching reach 'C14154801.2' when the node 'C14154801' was requested
-            cols = [c for c in df.columns if str(c) == base or str(c).startswith(base + ":")]
+            cols = schema.match_columns(df.columns, quantity, element)
             if not cols:
                 raise ValueError(f"no series for quantity={quantity!r} element={element!r}")
             col = cols[0]
-            s = df[col]
+            full = df[col]
+            # peak computed on the FULL series so downsampling can never hide it
+            pv = full.max()
+            has_peak = pv == pv  # False only when NaN
             max_pts = int(payload.get("max_points", 5000))
-            step = max(1, len(s) // max_pts)
-            s = s.iloc[::step]
+            step = max(1, len(full) // max_pts)
+            s = full.iloc[::step]
+            if step > 1 and has_peak:
+                # stride decimation skips extrema — splice the true peak back in
+                t_peak = full.idxmax()
+                if t_peak not in s.index:
+                    s = full.reindex(s.index.union([t_peak]))
             meta = schema.parse_column(col)
             result = {
                 "ok": True,
@@ -95,6 +100,9 @@ def main() -> None:
                 "chainage": meta["chainage"],
                 "unit": unit_for(quantity),
                 "n_points": int(len(s)),
+                "downsampled": bool(step > 1),
+                "peak_value": float(pv) if has_peak else None,
+                "peak_time": str(full.idxmax()) if has_peak else None,
                 "times": [str(t) for t in s.index],
                 "values": [float(v) for v in s.values],
             }

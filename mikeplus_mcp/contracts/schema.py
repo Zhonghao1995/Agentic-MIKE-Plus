@@ -31,6 +31,18 @@ def parse_column(col: str) -> dict:
     return {"quantity": quantity, "element_id": element_id, "chainage": chainage}
 
 
+def match_columns(columns, quantity: str, element: str) -> list:
+    """res1d columns whose ``Quantity:ElementId`` matches ``quantity``/``element``.
+
+    Matches an exact node series (``Quantity:Element``) OR a reach series carrying a
+    chainage suffix (``Quantity:Element:chainage``). The trailing ``':'`` guard keeps a
+    node ``X`` distinct from a reach ``X.2`` (the reach id contains the dot, so it never
+    matches the ``X:`` prefix). Returns the original column objects, in input order.
+    """
+    base = f"{quantity}:{element}"
+    return [c for c in columns if str(c) == base or str(c).startswith(base + ":")]
+
+
 def summarize(df, quantities=None) -> list[dict]:
     """Per-quantity peak summary (canonical). ``df`` = mikeio1d ``res.read()``."""
     cols_by_q: dict[str, list] = {}
