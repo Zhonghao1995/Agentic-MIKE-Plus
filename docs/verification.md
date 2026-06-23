@@ -99,7 +99,7 @@ all. This is an environment/licensing constraint, not a limitation of the code.
 ```powershell
 py -3.11 -m venv .venv
 .\.venv\Scripts\python.exe -m pip install -r requirements.lock
-.\.venv\Scripts\python.exe -m pip install -e .
+.\.venv\Scripts\python.exe -m pip install -e ".[run]"   # read/plot only: drop the lock and use `-e .`
 .\.venv\Scripts\python.exe scripts\smoke_test.py
 # then point the mike_* tools at a MIKE+ model (a working copy of Sirius_RTC, etc.)
 ```

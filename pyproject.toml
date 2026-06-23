@@ -8,15 +8,20 @@ version = "0.1.0"
 description = "MCP server + skills to drive MIKE+ headless (run / read results / plot) via natural language"
 readme = "README.md"
 requires-python = ">=3.10,<3.12"
+# Base install = the license-free read/plot half (portable, any OS, no MIKE+).
 dependencies = [
   "mcp>=1.28",
-  "mikeplus==2026.0.0",
   "mikeio>=3.1",
   "mikeio1d>=1.2",
   "pandas>=2.0",
   "matplotlib>=3.8",
   "shapely>=2.0",
 ]
+
+[project.optional-dependencies]
+# Run / edit a model needs DHI's mikeplus (Windows + .NET + a licensed MIKE+ 2026).
+# Install with:  pip install -e .[run]
+run = ["mikeplus==2026.0.0"]
 
 [project.scripts]
 mike-plus-mcp = "mikeplus_mcp.server:run"

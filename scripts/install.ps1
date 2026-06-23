@@ -8,10 +8,10 @@ Write-Host "[1/4] Creating Python 3.11 venv (.venv) ..."
 py -3.11 -m venv .venv
 $py = Join-Path $root ".venv\Scripts\python.exe"
 
-Write-Host "[2/4] Installing pinned dependencies + the package ..."
+Write-Host "[2/4] Installing pinned dependencies + the package (incl. the [run] extra) ..."
 & $py -m pip install --upgrade pip
 & $py -m pip install -r requirements.lock
-& $py -m pip install -e .
+& $py -m pip install -e ".[run]"   # read/plot only needs `-e .` (no mikeplus / license)
 
 Write-Host "[3/4] Registering the MCP server with Claude Code ..."
 $addCmd = "claude mcp add mike-plus -- `"$py`" -m mikeplus_mcp.server"
