@@ -15,6 +15,9 @@ def main() -> None:
     try:
         import mikeplus as mp
 
+        from pathlib import Path
+        from mikeplus_mcp.runtime.engine_log import read_run_log
+
         sqlite = payload["sqlite"]
         sim = payload.get("simulation")
         t0 = time.time()
@@ -26,12 +29,15 @@ def main() -> None:
                     print(f"[run] could not set active_simulation={sim!r}: {exc}", file=sys.stderr)
             active = str(db.active_simulation)
             files = db.run()
+        # QA gate: parse the engine .log the run just wrote next to the model
+        qa = read_run_log(Path(sqlite).parent, since_mtime=t0 - 5)
         result = {
             "ok": True,
             "sqlite": sqlite,
             "active_simulation": active,
             "result_files": [str(f) for f in (files or [])],
             "elapsed_s": round(time.time() - t0, 1),
+            **qa,
         }
     except Exception as exc:
         result = {"ok": False, "error": f"{type(exc).__name__}: {exc}"}
