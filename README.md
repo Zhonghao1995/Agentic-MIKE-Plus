@@ -25,7 +25,8 @@ Install "Agentic MIKE+" for me — an MCP server + skills to drive MIKE+ headles
 2. With Python 3.11 x64 (mikeplus needs 3.9-3.11, not 3.12+):
      py -3.11 -m venv .venv
      .venv\Scripts\python.exe -m pip install -r requirements.lock
-     .venv\Scripts\python.exe -m pip install -e .
+     .venv\Scripts\python.exe -m pip install -e ".[run]"
+   (read/plot only, no license: drop the lock and use `pip install -e .`)
 3. Register with me — Claude Code:
      claude mcp add mike-plus -- "<abs-repo>\.venv\Scripts\python.exe" -m mikeplus_mcp.server
    (Codex / Hermes / OpenClaw: copy config/mcp.sample.json)
@@ -33,7 +34,12 @@ Install "Agentic MIKE+" for me — an MCP server + skills to drive MIKE+ headles
 5. Tell me the tools and which need a MIKE+ license (run/edit do; read/plot don't).
 ```
 
-Needs **Python 3.11 (x64)**; *run/edit* also needs a licensed **MIKE+ 2026**. Versions pinned in [`requirements.lock`](requirements.lock).
+Needs **Python 3.11 (x64)**. Two install profiles:
+
+- **Read & plot** — license-free and cross-platform: `pip install -e .` (no `mikeplus`).
+- **Run & edit too** — Windows + a licensed **MIKE+ 2026**: `pip install -e ".[run]"` (or `pip install -r requirements.lock` for the exact pinned environment).
+
+`mikeplus` is an optional `[run]` extra, so teammates who only read results or make figures install nothing license-bound.
 
 ## Why it matters
 
