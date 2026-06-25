@@ -1,5 +1,6 @@
 ---
 name: mike-params
+version: 0.1.0
 description: Read and modify MIKE+ model parameters via the mike-plus MCP server — inspect or change values in any model table (pipe Diameter/Manning in msm_Link, node levels in msm_Node, catchment properties in msm_Catchment, etc.). Use when an agent must identify a current parameter and change it before re-running. Requires MIKE+ + license; mutating tools must run on a copy.
 ---
 

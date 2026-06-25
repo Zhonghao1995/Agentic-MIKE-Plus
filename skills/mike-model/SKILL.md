@@ -1,5 +1,6 @@
 ---
 name: mike-model
+version: 0.1.0
 description: Inspect a MIKE+ .sqlite model via the mike-plus MCP server — active simulation/scenario/model, unit system, the list of simulation setups and scenarios, and element counts. Use when an agent needs to understand a MIKE+ model before running or editing it. Requires MIKE+ installed + a license.
 ---
 

@@ -79,6 +79,12 @@ agent  ->  reads skills/*.md  ->  calls MCP tools  ->  workers (mikeplus / mikei
 
 Five skills (`mike-model`, `mike-params`, `mike-runner`, `mike-results`, `mike-plot`) orchestrate them.
 
+**Install the skills** into any skills-aware agent (Claude Code, Codex, OpenCode, …) in one command — no clone needed:
+
+```bash
+npx skills add Zhonghao1995/Agentic-MIKE-Plus      # all 5 — add --list to preview, or --skill <name> for one
+```
+
 ## Demo — `Sirius_RTC` (MIKE 1D, 568 nodes, 576 links)
 
 <p align="center">

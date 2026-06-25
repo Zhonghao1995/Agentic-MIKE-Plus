@@ -1,5 +1,6 @@
 ---
 name: mike-plot
+version: 0.1.0
 description: Produce publication-style figures from MIKE+ .res1d results via the mike-plus MCP server — a stacked rainfall-runoff hydrograph or a single time series, in the house style (Arial 12, ticks inward, SI units, no title). Use when an agent must render MIKE+ results as a PNG without opening the GUI. No license required.
 ---
 
