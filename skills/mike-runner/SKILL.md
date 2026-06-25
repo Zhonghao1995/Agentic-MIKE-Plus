@@ -1,5 +1,6 @@
 ---
 name: mike-runner
+version: 0.1.0
 description: Run MIKE+ simulations headless via the mike-plus MCP server and report result files + engine status. Use when an agent must execute a MIKE+ .sqlite model's active (or a named) simulation without opening the MIKE+ GUI, then hand the .res1d outputs to reading/plotting. Requires MIKE+ installed + a valid license. Always run on a copy.
 ---
 

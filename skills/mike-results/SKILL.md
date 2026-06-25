@@ -1,5 +1,6 @@
 ---
 name: mike-results
+version: 0.1.0
 description: Read MIKE+ .res1d results via the mike-plus MCP server — list contents, summarize peaks, or extract a single time series. Use when an agent needs to inspect or pull numbers from MIKE+ network results (node water levels, link/reach discharge, velocities). No MIKE+ license or installation required.
 ---
 
