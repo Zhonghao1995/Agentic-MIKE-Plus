@@ -5,7 +5,6 @@
 
 <p>
   <a href="https://github.com/Zhonghao1995/Agentic-MIKE-Plus/actions/workflows/ci.yml"><img src="https://github.com/Zhonghao1995/Agentic-MIKE-Plus/actions/workflows/ci.yml/badge.svg" alt="CI" /></a>
-  <a href="https://glama.ai/mcp/servers/Zhonghao1995/Agentic-MIKE-Plus"><img src="https://glama.ai/mcp/servers/Zhonghao1995/Agentic-MIKE-Plus/badges/score.svg" alt="Glama score" /></a>
   <img src="https://img.shields.io/badge/python-3.11_x64-3776AB" alt="Python 3.11 x64" />
   <img src="https://img.shields.io/badge/MIKE%2B-2026-0a7d8c" alt="MIKE+ 2026" />
   <img src="https://img.shields.io/badge/MCP-1.28-7C3AED" alt="MCP 1.28" />
