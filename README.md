@@ -35,8 +35,8 @@ Install "Agentic MIKE+" for me: an MCP server + skills to drive MIKE+ headless.
 3. Register with me (Claude Code):
      claude mcp add mike-plus -- "<abs-repo>\.venv\Scripts\python.exe" -m mikeplus_mcp.server
    (Codex / Hermes / OpenClaw: copy config/mcp.sample.json)
-4. Copy skills/* into ~/.claude/skills/, then run scripts/smoke_test.py (should find 10 tools).
-5. Tell me the tools and which need a MIKE+ license (run/edit do; read/plot don't).
+4. Copy skills/* into ~/.claude/skills/, then run scripts/smoke_test.py (should find 18 tools).
+5. Tell me the tools and which need a MIKE+ license (run/edit/import do; read/plot/compare don't).
 ```
 
 Needs **Python 3.11 (x64)**. Two install profiles:
@@ -75,18 +75,25 @@ agent  ->  reads skills/*.md  ->  calls MCP tools  ->  workers (mikeplus / mikei
 
 | Tool | Does | License |
 |---|---|---|
-| `mike_model_info` | model overview: simulations, scenarios, element counts | yes |
+| `mike_model_info` | model overview: simulations, scenarios, model type, element counts | yes |
+| `mike_set_scenario` | activate an existing scenario (verified by re-opening the model) | yes |
 | `mike_get_values` / `mike_set_values` | read / change parameters (e.g. pipe diameter) | yes |
 | `mike_run` | run a simulation headless, return `.res1d` + a parsed QA status (completed / errors / warnings) | yes |
+| `mike_import_swmm` | import an EPA SWMM (or EPANET) `.inp` into a new MIKE+ model: the SWMMCanada bridge | yes |
 | `mike_results_list` / `summary` / `read` | list contents / peaks / one time series | no |
+| `mike_results_flooding` | which nodes flood: peak water level vs ground level, ranked | no |
+| `mike_results_compare` | baseline vs scenario: delta peak / volume / timing, RMSE, NSE; or every element ranked by change | no |
 | `mike_plot_rain_flow` / `timeseries` / `network` | stacked hydrograph / series / network map | no |
+| `mike_plot_compare` / `mike_plot_profile` | overlay of two runs / longitudinal profile (bed, crown, ground, max water level) | no |
+| `mike_rain_to_dfs0` | rainfall CSV to a MIKE+ `.dfs0` (intensity, read-back verified) | no |
+| `mike_manifest_write` | provenance manifest: model, inputs, edits, run QA, results, figures, each with sha256 | no |
 
-Five skills (`mike-model`, `mike-params`, `mike-runner`, `mike-results`, `mike-plot`) orchestrate them.
+Ten skills orchestrate them: `mike-end-to-end` (the SOP: modes, run directory, stop rules, QA gates), `mike-model`, `mike-params`, `mike-runner`, `mike-import`, `mike-results`, `mike-compare`, `mike-plot`, `mike-rain`, `mike-audit`.
 
 **Install the skills** into any skills-aware agent (Claude Code, Codex, OpenCode, …) in one command, no clone needed:
 
 ```bash
-npx skills add Zhonghao1995/Agentic-MIKE-Plus      # all 5; add --list to preview, or --skill <name> for one
+npx skills add Zhonghao1995/Agentic-MIKE-Plus      # all 10; add --list to preview, or --skill <name> for one
 ```
 
 ## Demo: `Sirius_RTC` (MIKE 1D, 568 nodes, 576 links)
@@ -110,7 +117,7 @@ pip install pytest
 pytest                      # ~0.5 s, no license required
 ```
 
-The tests pin the result schema, the res1d column matcher, the engine-log QA parser, and tool discovery, so a change can't silently break them. Add a tool or skill by dropping a file under `mikeplus_mcp/tools/` or `skills/` (auto-discovered), and ship a test with it.
+The tests pin the result schema, the res1d column matcher, the engine-log QA parser, the compare / rain / manifest / SWMM-inp helpers, and tool discovery, so a change can't silently break them. Add a tool or skill by dropping a file under `mikeplus_mcp/tools/` or `skills/` (auto-discovered), and ship a test with it.
 
 ## License
 
