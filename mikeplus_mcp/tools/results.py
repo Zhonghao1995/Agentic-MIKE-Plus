@@ -79,4 +79,60 @@ def get_tools():
                 timeout=600,
             ),
         ),
+        ToolDef(
+            name="mike_results_compare",
+            description=(
+                "Compare two MIKE+ .res1d results (A = baseline, B = scenario) for one quantity. "
+                "With 'element': delta peak (value/%/time shift), delta volume for flows, RMSE/NSE "
+                "of B vs A. Without 'element': peak change for EVERY element of that quantity, "
+                "ranked by |delta| (answers 'where did my edit matter?'). No license needed."
+            ),
+            input_schema={
+                "type": "object",
+                "properties": {
+                    "res1d_a": {"type": "string", "description": "Baseline .res1d."},
+                    "res1d_b": {"type": "string", "description": "Scenario .res1d."},
+                    "quantity": {"type": "string", "description": "e.g. 'Discharge' or 'WaterLevel'."},
+                    "element": {"type": "string", "description": "Element id for a single-series comparison; omit to rank all elements."},
+                    "skip_hours": {"type": "number", "description": "Exclude the first N hours (warm-up) from both results."},
+                    "top_n": {"type": "integer", "description": "How many elements to return in ranked mode (default 10)."},
+                    "label_a": {"type": "string", "description": "Name for A (default 'baseline')."},
+                    "label_b": {"type": "string", "description": "Name for B (default 'scenario')."},
+                },
+                "required": ["res1d_a", "res1d_b", "quantity"],
+            },
+            handler=lambda a: call_worker(
+                "results_worker",
+                {"action": "compare", "res1d_a": a["res1d_a"], "res1d_b": a["res1d_b"],
+                 "quantity": a["quantity"], "element": a.get("element"),
+                 "skip_hours": a.get("skip_hours"), "top_n": a.get("top_n"),
+                 "label_a": a.get("label_a"), "label_b": a.get("label_b")},
+                timeout=900,
+            ),
+        ),
+        ToolDef(
+            name="mike_results_flooding",
+            description=(
+                "Which nodes flood? Peak water level vs ground level for every node in a MIKE+ "
+                ".res1d: flooded nodes ranked by exceedance (with peak time and type), how many "
+                "exceed the critical level, and the nodes closest to flooding. No license needed."
+            ),
+            input_schema={
+                "type": "object",
+                "properties": {
+                    "res1d": {"type": "string"},
+                    "skip_hours": {"type": "number", "description": "Exclude the first N hours (warm-up)."},
+                    "top_n": {"type": "integer", "description": "Max flooded nodes to list (default 20)."},
+                    "include_outlets": {"type": "boolean", "description": "Also assess Outlet nodes (default false: their level is the boundary, not flooding)."},
+                },
+                "required": ["res1d"],
+            },
+            handler=lambda a: call_worker(
+                "results_worker",
+                {"action": "flooding", "res1d": a["res1d"],
+                 "skip_hours": a.get("skip_hours"), "top_n": a.get("top_n"),
+                 "include_outlets": a.get("include_outlets", False)},
+                timeout=600,
+            ),
+        ),
     ]

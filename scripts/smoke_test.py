@@ -18,8 +18,12 @@ def main() -> int:
     print("discovered tools:", ", ".join(sorted(tools)))
     expected = {
         "mike_model_info", "mike_get_values", "mike_set_values", "mike_run",
+        "mike_set_scenario", "mike_import_swmm",
         "mike_results_list", "mike_results_summary", "mike_results_read",
+        "mike_results_compare", "mike_results_flooding",
         "mike_plot_rain_flow", "mike_plot_timeseries", "mike_plot_network",
+        "mike_plot_compare", "mike_plot_profile",
+        "mike_rain_to_dfs0", "mike_manifest_write",
     }
     missing = expected - set(tools)
     if missing:

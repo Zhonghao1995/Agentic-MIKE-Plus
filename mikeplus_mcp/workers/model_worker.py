@@ -22,27 +22,38 @@ def main() -> None:
 
         sqlite = payload["sqlite"]
         with mp.open(sqlite) as db:
+            # MIKE 1D models live in msm_* tables, MIKE+ SWMM models in mss_* tables
+            active_model = str(db.active_model)
+            pre = "mss" if active_model == "CS_SWMM" else "msm"
             try:
-                proj = db.tables.msm_Project.to_dataframe()
+                proj = getattr(db.tables, f"{pre}_Project").to_dataframe()
                 sims = [str(x) for x in list(proj.index)]
             except Exception:
                 sims = []
-            try:
-                scenarios = [str(s) for s in db.scenarios]
+            try:   # names (not reprs) so they can be passed to mike_set_scenario
+                scenarios, todo = [], [db.scenarios.base]
+                while todo:
+                    s = todo.pop(0)
+                    scenarios.append(str(s.name))
+                    todo.extend(list(s.children or []))
             except Exception:
                 scenarios = []
+            try:
+                active_scenario = str(db.active_scenario.name)
+            except Exception:
+                active_scenario = str(db.active_scenario)
             result = {
                 "ok": True,
                 "sqlite": sqlite,
                 "active_simulation": str(db.active_simulation),
-                "active_scenario": str(db.active_scenario),
-                "active_model": str(db.active_model),
+                "active_scenario": active_scenario,
+                "active_model": active_model,
                 "unit_system": str(db.unit_system),
                 "simulations": sims,
                 "scenarios": scenarios,
                 "counts": {
-                    "nodes": _count(db, "msm_Node"),
-                    "links": _count(db, "msm_Link"),
+                    "nodes": _count(db, f"{pre}_Node"),
+                    "links": _count(db, f"{pre}_Link"),
                     "catchments": _count(db, "msm_Catchment"),
                 },
             }

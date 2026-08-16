@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "mikeplus-mcp"
-version = "0.1.0"
-description = "MCP server + skills to drive MIKE+ headless (run / read results / plot) via natural language"
+version = "0.2.0"
+description = "MCP server + skills to drive MIKE+ headless (run / edit / import / read results / compare / plot / audit) via natural language"
 readme = "README.md"
 requires-python = ">=3.10,<3.12"
 # Base install = the license-free read/plot half (portable, any OS, no MIKE+).
